@@ -1,0 +1,9 @@
+#Using MinGW distro from http://nuwen.net/mingw.html that contains boost precompiled
+ 
+all:
+	g++ -O2 -c main.cpp -D_WIN32_WINNT=0x0501
+	g++ -O2 -c serialstream.cpp -D_WIN32_WINNT=0x0501
+	g++ -o stream.exe main.o serialstream.o -s -lwsock32 -lws2_32 -lboost_system
+
+clean:
+	del stream.exe main.o serialstream.o

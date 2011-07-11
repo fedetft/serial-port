@@ -1,0 +1,10 @@
+#Using MinGW distro from http://nuwen.net/mingw.html that contains boost precompiled
+ 
+all:
+	g++ -O2 -c main.cpp -D_WIN32_WINNT=0x0501
+	g++ -O2 -c AsyncSerial.cpp -D_WIN32_WINNT=0x0501
+	g++ -O2 -c BufferedAsyncSerial.cpp -D_WIN32_WINNT=0x0501
+	g++ -o async.exe main.o AsyncSerial.o BufferedAsyncSerial.o -s -lwsock32 -lws2_32 -lboost_system -lboost_thread
+
+clean:
+	del async.exe main.o AsyncSerial.o BufferedAsyncSerial.o

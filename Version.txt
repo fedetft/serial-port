@@ -1,0 +1,13 @@
+
+v1.08: Fixed compiling with visual studio 2010, thanks to Carlo Nicolini for
+       the bug report.
+v1.07: Fixed a bug in TimeoutSerial. Added new class SerialStream.
+v1.06: Fixed a bug in BufferedAsyncSerial: instantiating objects with the default
+       constructor did not set up the callback, and reading failed.
+v1.05: Fixed a bug in CallbackAsyncSerial, BufferedAsyncSerial and QAsyncSerial where
+       trying to reopen a closed port failed.
+v1.04: QAsyncSerial added for Qt integration. Mac OS X fixes for AsyncSerial.
+v1.03: Mac OS X fixes for TimeoutSerial.
+v1.02: Code cleanup for class TimeoutSerial, speed improvements, bug fixes.
+v1.01: Fixed a bug in TimeoutSerial.cpp that caused errors while reading after a timeout.
+v1.00: First release.
