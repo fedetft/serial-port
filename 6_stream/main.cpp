@@ -18,9 +18,15 @@ int main(int argc, char* argv[])
     SerialStream serial(options);
     serial.exceptions(ios::badbit | ios::failbit); //Important!
     serial<<"Hello world"<<endl;
-    string s;
-    //serial>>s;
-    getline(serial,s);
-    cout<<s<<endl;
+    try {
+        string s;
+        //serial>>s;
+        getline(serial,s);
+        cout<<s<<endl;
+    catch(TimeoutException&)
+    {
+        serial.clear(); //Don't forget to clear error flags after a timeout
+        cerr<<"Timeout occurred"<<endl;
+    }
     return 0;
 }

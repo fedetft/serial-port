@@ -1,6 +1,10 @@
 /*
  * Author: Terraneo Federico
  * Distributed under the Boost Software License, Version 1.0.
+ *
+ * v1.01:  Fixed a bug regarding reading after a timeout.
+ *
+ * v1.00: First release.
  */
 
 #include "serialstream.h"
@@ -187,8 +191,12 @@ void SerialDevice::readCompleted(const boost::system::error_code& error,
         pImpl->bytesTransferred=bytesTransferred;
         return;
     }
-    
-    #ifdef __APPLE__
+
+    //In case a asynchronous operation is cancelled due to a timeout,
+    //each OS seems to have its way to react.
+    #ifdef _WIN32
+    if(error.value()==995) return; //Windows spits out error 995
+    #elif defined(__APPLE__)
     if(error.value()==45)
     {
         //Bug on OS X, it might be necessary to repeat the setup
@@ -199,7 +207,9 @@ void SerialDevice::readCompleted(const boost::system::error_code& error,
                 boost::asio::placeholders::bytes_transferred));
         return;
     }
-    #endif //__APPLE__
+    #else //Linux
+    if(error.value()==125) return; //Linux outputs error 125
+    #endif
 
     pImpl->result=resultError;
 }
