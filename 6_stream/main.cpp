@@ -23,8 +23,7 @@ int main(int argc, char* argv[])
         //serial>>s;
         getline(serial,s);
         cout<<s<<endl;
-    catch(TimeoutException&)
-    {
+    } catch(TimeoutException&) {
         serial.clear(); //Don't forget to clear error flags after a timeout
         cerr<<"Timeout occurred"<<endl;
     }
