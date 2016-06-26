@@ -79,7 +79,7 @@ QAsyncSerial::~QAsyncSerial()
 
 void QAsyncSerial::readCallback(const char *data, size_t size)
 {
-    pimpl->receivedData+=QString::fromAscii(data,size);
+    pimpl->receivedData+=QString::fromLatin1(data,size);
     if(pimpl->receivedData.contains('\n'))
     {
         QStringList lineList=pimpl->receivedData.split(QRegExp("\r\n|\n"));
