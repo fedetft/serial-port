@@ -4,6 +4,8 @@
  * Distributed under the Boost Software License, Version 1.0.
  * Created on September 12, 2009, 3:47 PM
  *
+ * v1.06: C++11 support
+ *
  * v1.05: Fixed a bug regarding reading after a timeout (again).
  *
  * v1.04: Fixed bug with timeout set to zero
@@ -27,14 +29,14 @@ using namespace std;
 using namespace boost;
 
 TimeoutSerial::TimeoutSerial(): io(), port(io), timer(io),
-        timeout(posix_time::seconds(0)) {}
+        timeout(boost::posix_time::seconds(0)) {}
 
 TimeoutSerial::TimeoutSerial(const std::string& devname, unsigned int baud_rate,
         asio::serial_port_base::parity opt_parity,
         asio::serial_port_base::character_size opt_csize,
         asio::serial_port_base::flow_control opt_flow,
         asio::serial_port_base::stop_bits opt_stop)
-        : io(), port(io), timer(io), timeout(posix_time::seconds(0))
+        : io(), port(io), timer(io), timeout(boost::posix_time::seconds(0))
 {
     open(devname,baud_rate,opt_parity,opt_csize,opt_flow,opt_stop);
 }
@@ -65,7 +67,7 @@ void TimeoutSerial::close()
     port.close();
 }
 
-void TimeoutSerial::setTimeout(const posix_time::time_duration& t)
+void TimeoutSerial::setTimeout(const boost::posix_time::time_duration& t)
 {
     timeout=t;
 }
@@ -102,8 +104,8 @@ void TimeoutSerial::read(char *data, size_t size)
 
     //For this code to work, there should always be a timeout, so the
     //request for no timeout is translated into a very long timeout
-    if(timeout!=posix_time::seconds(0)) timer.expires_from_now(timeout);
-    else timer.expires_from_now(posix_time::hours(100000));
+    if(timeout!=boost::posix_time::seconds(0)) timer.expires_from_now(timeout);
+    else timer.expires_from_now(boost::posix_time::hours(100000));
     
     timer.async_wait(boost::bind(&TimeoutSerial::timeoutExpired,this,
                 asio::placeholders::error));
@@ -155,8 +157,8 @@ std::string TimeoutSerial::readStringUntil(const std::string& delim)
 
     //For this code to work, there should always be a timeout, so the
     //request for no timeout is translated into a very long timeout
-    if(timeout!=posix_time::seconds(0)) timer.expires_from_now(timeout);
-    else timer.expires_from_now(posix_time::hours(100000));
+    if(timeout!=boost::posix_time::seconds(0)) timer.expires_from_now(timeout);
+    else timer.expires_from_now(boost::posix_time::hours(100000));
 
     timer.async_wait(boost::bind(&TimeoutSerial::timeoutExpired,this,
                 asio::placeholders::error));

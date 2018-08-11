@@ -1,4 +1,6 @@
 
+v1.10: Added C++11 support, replaced boost libs with the std equivalent when
+       possible/convenient
 v1.09: Fixed a bug when reading after a timeout, reported by Erik Svensson.
 v1.08: Fixed compiling with visual studio 2010, thanks to Carlo Nicolini for
        the bug report.

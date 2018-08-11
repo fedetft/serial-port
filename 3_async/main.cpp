@@ -1,11 +1,10 @@
 
 #include <iostream>
-#include <boost/thread.hpp>
+#include <thread>
 
 #include "BufferedAsyncSerial.h"
 
 using namespace std;
-using namespace boost;
 
 int main(int argc, char* argv[])
 {
@@ -19,7 +18,7 @@ int main(int argc, char* argv[])
         //Simulate doing something else while the serial device replies.
         //When the serial device replies, the second thread stores the received
         //data in a buffer.
-        this_thread::sleep(posix_time::seconds(2));
+        this_thread::sleep_for(chrono::seconds(2));
 
         //Always returns immediately. If the terminator \r\n has not yet
         //arrived, returns an empty string.

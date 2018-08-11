@@ -23,9 +23,9 @@ int main(int argc, char* argv[])
         cout<<serial.readStringUntil("\r\n")<<endl;
     
         //Binary test
-        char values[]={0xde,0xad,0xbe,0xef};
-        serial.write(values,sizeof(values));
-        serial.read(values,sizeof(values));
+        unsigned char values[]={0xde,0xad,0xbe,0xef};
+        serial.write(reinterpret_cast<char*>(values),sizeof(values));
+        serial.read(reinterpret_cast<char*>(values),sizeof(values));
         for(unsigned int i=0;i<sizeof(values);i++)
         {
             cout<<static_cast<int>(values[i])<<endl;

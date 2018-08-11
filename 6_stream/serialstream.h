@@ -4,9 +4,9 @@
  */
 
 #include <string>
+#include <memory>
 #include <stdexcept>
 #include <boost/system/error_code.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/iostreams/stream.hpp>
 #include <boost/iostreams/categories.hpp>
 #include <boost/date_time/posix_time/posix_time_duration.hpp>
@@ -180,7 +180,7 @@ private:
     void readCompleted(const boost::system::error_code& error,
             const size_t bytesTransferred);
 
-    boost::shared_ptr<SerialDeviceImpl> pImpl; //Implementation
+    std::shared_ptr<SerialDeviceImpl> pImpl; //Implementation
 };
 
 /**

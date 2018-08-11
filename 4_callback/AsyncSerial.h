@@ -9,12 +9,10 @@
 #define	ASYNCSERIAL_H
 
 #include <vector>
+#include <memory>
+#include <functional>
 #include <boost/asio.hpp>
-#include <boost/bind.hpp>
-#include <boost/thread.hpp>
 #include <boost/utility.hpp>
-#include <boost/function.hpp>
-#include <boost/shared_array.hpp>
 
 /**
  * Used internally (pimpl)
@@ -155,7 +153,7 @@ private:
      */
     void doClose();
 
-    boost::shared_ptr<AsyncSerialImpl> pimpl;
+    std::shared_ptr<AsyncSerialImpl> pimpl;
 
 protected:
 
@@ -168,8 +166,7 @@ protected:
     /**
      * To allow derived classes to set a read callback
      */
-    void setReadCallback(const
-            boost::function<void (const char*, size_t)>& callback);
+    void setReadCallback(const std::function<void (const char*, size_t)>& callback);
 
     /**
      * To unregister the read callback in the derived class destructor so it
@@ -220,8 +217,7 @@ public:
      * serial port.
      * \param callback the receive callback
      */
-    void setCallback(const
-            boost::function<void (const char*, size_t)>& callback);
+    void setCallback(const std::function<void (const char*, size_t)>& callback);
 
     /**
      * Removes the callback. Any data received after this function call will

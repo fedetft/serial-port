@@ -8,6 +8,8 @@
 #include <QStringList>
 #include <QRegExp>
 
+using namespace std::placeholders;
+
 /**
  * Implementation details of QAsyncSerial class.
  */

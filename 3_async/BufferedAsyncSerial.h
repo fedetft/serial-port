@@ -6,6 +6,7 @@
  */
 
 #include "AsyncSerial.h"
+#include <mutex>
 
 #ifndef BUFFEREDASYNCSERIAL_H
 #define	BUFFEREDASYNCSERIAL_H
@@ -93,7 +94,7 @@ private:
             const std::string& s);
 
     std::vector<char> readQueue;
-    boost::mutex readQueueMutex;
+    std::mutex readQueueMutex;
 };
 
 #endif //BUFFEREDASYNCSERIAL_H

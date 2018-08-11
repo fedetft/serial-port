@@ -7,7 +7,7 @@
 #define QASYNCSERIAL_H
 
 #include <QObject>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class QAsyncSerialImpl;
 
@@ -81,7 +81,7 @@ private:
      */
     void readCallback(const char *data, size_t size);
 
-    boost::shared_ptr<QAsyncSerialImpl> pimpl; ///< Pimpl idiom
+    std::shared_ptr<QAsyncSerialImpl> pimpl; ///< Pimpl idiom
 };
 
 #endif // QASYNCSERIAL_H

@@ -3,8 +3,6 @@
 
 #include <iostream>
 #include <termios.h>
-#include <boost/lexical_cast.hpp>
-#include <boost/thread.hpp>
 
 using namespace std;
 
@@ -45,8 +43,7 @@ int main(int argc, char* argv[])
     cout<<"\e[2J\e[1;1H"; //Clear screen and put cursor to 1;1
 
     try {
-        CallbackAsyncSerial serial(argv[1],
-                boost::lexical_cast<unsigned int>(argv[2]));
+        CallbackAsyncSerial serial(argv[1],stoi(argv[2]));
         serial.setCallback(received);
         for(;;)
         {

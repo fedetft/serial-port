@@ -4,6 +4,8 @@
  * Distributed under the Boost Software License, Version 1.0.
  * Created on September 7, 2009, 10:46 AM
  *
+ * v1.03: C++11 support
+ *
  * v1.02: Fixed a bug in BufferedAsyncSerial: Using the default constructor
  * the callback was not set up and reading didn't work.
  *
@@ -29,8 +31,10 @@
 
 #include <string>
 #include <algorithm>
-#include <iostream>
+#include <thread>
+#include <mutex>
 #include <boost/bind.hpp>
+#include <boost/shared_array.hpp>
 
 using namespace std;
 using namespace boost;
@@ -49,20 +53,20 @@ public:
 
     boost::asio::io_service io; ///< Io service object
     boost::asio::serial_port port; ///< Serial port object
-    boost::thread backgroundThread; ///< Thread that runs read/write operations
+    std::thread backgroundThread; ///< Thread that runs read/write operations
     bool open; ///< True if port open
     bool error; ///< Error flag
-    mutable boost::mutex errorMutex; ///< Mutex for access to error
+    mutable std::mutex errorMutex; ///< Mutex for access to error
 
     /// Data are queued here before they go in writeBuffer
     std::vector<char> writeQueue;
     boost::shared_array<char> writeBuffer; ///< Data being written
     size_t writeBufferSize; ///< Size of writeBuffer
-    boost::mutex writeQueueMutex; ///< Mutex for access to writeQueue
+    std::mutex writeQueueMutex; ///< Mutex for access to writeQueue
     char readBuffer[AsyncSerial::readBufferSize]; ///< data being read
 
     /// Read complete callback
-    boost::function<void (const char*, size_t)> callback;
+    std::function<void (const char*, size_t)> callback;
 };
 
 AsyncSerial::AsyncSerial(): pimpl(new AsyncSerialImpl)
@@ -267,14 +271,15 @@ void AsyncSerial::setErrorStatus(bool e)
     pimpl->error=e;
 }
 
-void AsyncSerial::setReadCallback(const boost::function<void (const char*, size_t)>& callback)
+void AsyncSerial::setReadCallback(const std::function<void (const char*, size_t)>& callback)
 {
     pimpl->callback=callback;
 }
 
 void AsyncSerial::clearReadCallback()
 {
-    pimpl->callback.clear();
+    std::function<void (const char*, size_t)> empty;
+    pimpl->callback.swap(empty);
 }
 
 #else //__APPLE__
@@ -300,7 +305,7 @@ public:
     char readBuffer[AsyncSerial::readBufferSize]; ///< data being read
 
     /// Read complete callback
-    boost::function<void (const char*, size_t)> callback;
+    std::function<void (const char*, size_t)> callback;
 };
 
 AsyncSerial::AsyncSerial(): pimpl(new AsyncSerialImpl)
@@ -510,15 +515,15 @@ void AsyncSerial::setErrorStatus(bool e)
     pimpl->error=e;
 }
 
-void AsyncSerial::setReadCallback(const
-        function<void (const char*, size_t)>& callback)
+void AsyncSerial::setReadCallback(const std::function<void (const char*, size_t)>& callback)
 {
     pimpl->callback=callback;
 }
 
 void AsyncSerial::clearReadCallback()
 {
-    pimpl->callback.clear();
+    std::function<void (const char*, size_t)> empty;
+    pimpl->callback.swap(empty);
 }
 
 #endif //__APPLE__
@@ -543,8 +548,7 @@ CallbackAsyncSerial::CallbackAsyncSerial(const std::string& devname,
 
 }
 
-void CallbackAsyncSerial::setCallback(const
-        boost::function<void (const char*, size_t)>& callback)
+void CallbackAsyncSerial::setCallback(const std::function<void (const char*, size_t)>& callback)
 {
     setReadCallback(callback);
 }
